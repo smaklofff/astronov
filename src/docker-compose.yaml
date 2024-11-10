@@ -1,0 +1,12 @@
+
+services:
+  postgres:
+    image: 'postgres:13'
+    container_name: 'LogsContainer'
+    ports:
+      - 5430:5432
+    environment:
+      - 'POSTGRES_USER=root'
+      - 'POSTGRES_PASSWORD=root'
+      - 'POSTGRES_HOST_AUTH_METHOD=trust'
+      - 'POSTGRES_DB=astronov'
