@@ -24,6 +24,7 @@ public class YandexGptRequestDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class CompletionOptions {
+
         private boolean stream;
         private double temperature;
         private String maxTokens;
@@ -35,6 +36,7 @@ public class YandexGptRequestDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Message {
+
         private String role;
         private String text;
         private ToolCallList toolCallList;
@@ -46,6 +48,7 @@ public class YandexGptRequestDto {
         @NoArgsConstructor
         @AllArgsConstructor
         public static class ToolCallList {
+
             private List<ToolCall> toolCalls;
 
             @Getter
@@ -54,6 +57,7 @@ public class YandexGptRequestDto {
             @NoArgsConstructor
             @AllArgsConstructor
             public static class ToolCall {
+
                 private FunctionCall functionCall;
 
                 @Getter
@@ -62,6 +66,7 @@ public class YandexGptRequestDto {
                 @NoArgsConstructor
                 @AllArgsConstructor
                 public static class FunctionCall {
+
                     private String name;
                     private Map<String, Object> arguments;
                 }
@@ -74,6 +79,7 @@ public class YandexGptRequestDto {
         @NoArgsConstructor
         @AllArgsConstructor
         public static class ToolResultList {
+
             private List<ToolResult> toolResults;
 
             @Getter
@@ -82,6 +88,7 @@ public class YandexGptRequestDto {
             @NoArgsConstructor
             @AllArgsConstructor
             public static class ToolResult {
+
                 private FunctionResult functionResult;
 
                 @Getter
@@ -90,6 +97,7 @@ public class YandexGptRequestDto {
                 @NoArgsConstructor
                 @AllArgsConstructor
                 public static class FunctionResult {
+
                     private String name;
                     private String content;
                 }
@@ -103,6 +111,7 @@ public class YandexGptRequestDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Tool {
+
         private Function function;
 
         @Getter
@@ -111,6 +120,7 @@ public class YandexGptRequestDto {
         @NoArgsConstructor
         @AllArgsConstructor
         public static class Function {
+
             private String name;
             private String description;
             private Map<String, Object> parameters;

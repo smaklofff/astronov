@@ -18,8 +18,7 @@ public class ExceptionHandlerController {
         Map<String, String> errors = new HashMap<>();
         e.getBindingResult()
                 .getAllErrors()
-                .forEach((error) -> errors.put(((FieldError) error).getField(), error.getDefaultMessage()));
-
+                .forEach(error -> errors.put(((FieldError) error).getField(), error.getDefaultMessage()));
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }

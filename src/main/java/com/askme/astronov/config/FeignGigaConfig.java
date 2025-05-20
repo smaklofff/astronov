@@ -3,39 +3,42 @@ package com.askme.astronov.config;
 import feign.Client;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+@Component
 public class FeignGigaConfig {
 
+    private final ResourceLoader resourceLoader;
+
+    public FeignGigaConfig(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
+
     @Bean
-    public Client feignClient() throws Exception {
+    public Client feignGigaChatClient() throws Exception {
         CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
 
-        // Загрузка .pem сертификата
-        FileInputStream fis = new FileInputStream("src/main/resources/certs/russiantrustedca.pem");
-        X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(fis);
+        InputStream inputStream = resourceLoader.getResource("classpath:certs/russiantrustedca.pem").getInputStream();
+        X509Certificate certificate = (X509Certificate) certificateFactory.generateCertificate(inputStream);
 
-        // Создание пустого хранилища сертификатов
         KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         keyStore.load(null, null); // Инициализация пустого хранилища
 
-        // Добавление сертификата в хранилище
         keyStore.setCertificateEntry("russiantrustedca", certificate);
 
-        // Настройка TrustManager с использованием созданного хранилища
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         trustManagerFactory.init(keyStore);
 
-        // Настройка SSLContext
         SSLContext sslContext = SSLContext.getInstance("TLS");
         sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
         return new Client.Default(sslContext.getSocketFactory(), SSLConnectionSocketFactory.getDefaultHostnameVerifier());
-//        return new Client();
     }
 }

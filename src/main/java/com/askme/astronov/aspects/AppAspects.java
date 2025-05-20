@@ -1,5 +1,6 @@
 package com.askme.astronov.aspects;
 
+import com.askme.astronov.dto.SurveyRequestDto;
 import com.askme.astronov.dto.requests.RequestDto;
 import com.askme.astronov.service.MonitoringService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class AppAspects {
 
 //    @Order(1)
     @Around(value = "@annotation(com.askme.astronov.aspects.annotations.OutgoingRequest)")
-    public Object around(ProceedingJoinPoint joinPoint) {
-        log.info("Adding log info in monitoring system");
+    public Object outgoingRequest(ProceedingJoinPoint joinPoint) {
+        log.info("Adding log info in monitoring system (OutgoingRequest)");
         Object[] args = joinPoint.getArgs();
 
         Object body = null, headers = null;
@@ -47,6 +48,31 @@ public class AppAspects {
             monitoring.receivedBadResponse(e.getMessage());
         }
         monitoring.receivedSuccessfulResponse(result);
+        return result;
+    }
+
+    @Around(value = "@annotation(com.askme.astronov.aspects.annotations.IncomingRequest)")
+    public Object incomingRequest(ProceedingJoinPoint joinPoint) {
+        log.info("Adding log info in monitoring system (IncomingRequest)");
+        Object[] args = joinPoint.getArgs();
+
+        Object body = null, headers = null;
+        for (Object arg : args) {
+            if (arg instanceof SurveyRequestDto) {
+                body = arg;
+            } else if (arg instanceof Map<?,?>) {
+                headers = arg;
+            }
+        }
+
+        monitoring.receivedIncomingRequest(headers, body);
+        Object result = null;
+        try {
+            result = joinPoint.proceed(args);
+        } catch (Throwable e) {
+            monitoring.receivedBadResponse(e.getMessage());
+        }
+        monitoring.responseToIncomingRequest(result);
         return result;
     }
 }

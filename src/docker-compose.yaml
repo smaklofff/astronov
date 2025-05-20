@@ -1,12 +1,67 @@
 
 services:
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    ports:
+      - 6380:6379
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_USER=${REDIS_USER}
+      - REDIS_USER_PASSWORD=${REDIS_USER_PASSWORD}
+    volumes:
+      - ../redisdata:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    command: >
+      sh -c '
+        mkdir -p /usr/local/etc/redis &&
+        echo "bind 0.0.0.0" > /usr/local/etc/redis/redis.conf &&
+        echo "requirepass $REDIS_PASSWORD" >> /usr/local/etc/redis/redis.conf &&
+        echo "appendonly yes" >> /usr/local/etc/redis/redis.conf &&
+        echo "appendfsync everysec" >> /usr/local/etc/redis/redis.conf &&
+        echo "user default on nopass ~* +@all" > /usr/local/etc/redis/users.acl &&
+        echo "user $REDIS_USER on >$REDIS_USER_PASSWORD ~* +@all" >> /usr/local/etc/redis/users.acl &&
+        redis-server /usr/local/etc/redis/redis.conf --aclfile /usr/local/etc/redis/users.acl
+      '
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "$REDIS_PASSWORD", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
   postgres:
     image: 'postgres:13'
     container_name: 'LogsContainer'
     ports:
       - 5430:5432
     environment:
-      - 'POSTGRES_USER=root'
-      - 'POSTGRES_PASSWORD=root'
-      - 'POSTGRES_HOST_AUTH_METHOD=trust'
-      - 'POSTGRES_DB=astronov'
+      - 'POSTGRES_USER=${POSTGRES_USER}'
+      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
+      - 'POSTGRES_HOST_AUTH_METHOD=${POSTGRES_HOST_AUTH_METHOD}'
+      - 'POSTGRES_DB=${POSTGRES_DB}'
+  vault:
+    image: 'hashicorp/vault'
+    container_name: 'VaultSecretsContainer'
+    command: "server -dev" # нужно только для разработки. Если ПРОД - поменять
+    ports:
+      - 8200:8200
+    environment:
+      - 'VAULT_DEV_ROOT_TOKEN_ID=${VAULT_DEV_ROOT_TOKEN_ID}'
+      - 'VAULT_TOKEN=${VAULT_TOKEN}'
+      - 'VAULT_ADDR=${VAULT_ADDR}'
+      - 'VAULT_DEV_LISTEN_ADDRESS=${VAULT_DEV_LISTEN_ADDRESS}'
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - vault_data:/vault/secrets
+volumes:
+  vault_data:

@@ -1,5 +1,7 @@
 package com.askme.astronov.dto.responses;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +13,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GigaChatResponseDto implements ResponseDto {
 
     private List<Choice> choices;
@@ -22,7 +26,10 @@ public class GigaChatResponseDto implements ResponseDto {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Choice {
+
         private Message message;
         private int index;
         @JsonProperty("finish_reason")
@@ -31,7 +38,10 @@ public class GigaChatResponseDto implements ResponseDto {
         @Getter
         @AllArgsConstructor
         @NoArgsConstructor
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        @JsonIgnoreProperties(ignoreUnknown = true)
         public static class Message {
+
             private String content;
             private String role;
         }
@@ -40,9 +50,17 @@ public class GigaChatResponseDto implements ResponseDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Usage {
-        private int prompt_tokens;
-        private int completion_tokens;
-        private int total_tokens;
+
+        @JsonProperty("prompt_tokens")
+        private int promptTokens;
+        @JsonProperty("completion_tokens")
+        private int completionTokens;
+        @JsonProperty("total_tokens")
+        private int totalTokens;
+        @JsonProperty("system_tokens")
+        private int systemTokens;
     }
 }

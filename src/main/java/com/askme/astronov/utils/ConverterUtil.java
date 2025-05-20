@@ -7,17 +7,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequiredArgsConstructor
 public class ConverterUtil {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    private ConverterUtil() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static <T> T convertToObject(String body, TypeReference<T> clazz) {
         T result = null;
         try {
             result = objectMapper.readValue(body, clazz);
         } catch (JsonProcessingException e) {
-            log.error("Error while converting object", e);
+            log.error("Error while converting object: {}", e);
         }
         return result;
     }

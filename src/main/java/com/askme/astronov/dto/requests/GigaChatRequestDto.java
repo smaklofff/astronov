@@ -1,5 +1,6 @@
 package com.askme.astronov.dto.requests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
@@ -14,7 +15,8 @@ public class GigaChatRequestDto implements RequestDto {
 
     private String model;
     private boolean stream;
-    private int update_interval;
+    @JsonProperty("update_interval")
+    private int updateInterval;
     private List<Message> messages;
 
     @Getter
@@ -24,8 +26,8 @@ public class GigaChatRequestDto implements RequestDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Message {
+
         private String role;
         private String content;
-
     }
 }
