@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: astronov
+  cloud:
+    vault:
+      host: localhost
+      port: 8200
+      scheme: http
+      authentication: TOKEN
+      token: root
+      kv:
+        enabled: true
+        backend: secret
+        application-name: astronov
+        default-context: astronov
+        profile-separator: '/'
+  profiles:
+    active: @spring.profiles.active@

@@ -1,0 +1,40 @@
+server:
+  port: 8082
+
+spring:
+  profiles:
+    active: @spring.profiles.active@
+  application:
+    name: astronov
+  liquibase:
+    change-log: db/changelog/master.xml
+  datasource:
+    url: jdbc:postgresql://localhost:5430/postgres
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+mask:
+  fields:
+    - Authorization
+
+gpt:
+  gigachat:
+    model: GigaChat
+    stream: false
+    update-interval: 0
+
+  yandex:
+    stream: false
+    temperature: 0.4
+    maxTokens: 10000
+
+  mistral:
+    model: ministral-8b-latest
+    temperature: 0.3
+    n: 3
+
