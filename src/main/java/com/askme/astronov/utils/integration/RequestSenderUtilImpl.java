@@ -1,6 +1,5 @@
 package com.askme.astronov.utils.integration;
 
-import com.askme.astronov.aspects.annotations.OutgoingRequest;
 import com.askme.astronov.service.feignClients.BasicFeignClient;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,6 @@ import java.util.Map;
 public class RequestSenderUtilImpl implements RequestSenderUtil {
 
     @Override
-    @OutgoingRequest
     public <T> String sendRequest(
             BasicFeignClient basicFeignClient,
             T requestBody,

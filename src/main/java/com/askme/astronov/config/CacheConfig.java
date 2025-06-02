@@ -25,16 +25,16 @@ public class CacheConfig {
         return template;
     }
 
-    @Bean
-    @Profile("dev")
-    public RedisTemplate<String, List<Map<String, ?>>> redisCacheTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, List<Map<String, ?>>> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setKeySerializer(new GenericJackson2JsonRedisSerializer());
-        template.setHashKeySerializer(new GenericJackson2JsonRedisSerializer());
-        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-        return template;
-    }
+//    @Bean
+//    @Profile("dev")
+//    public RedisTemplate<String, List<Map<String, ?>>> redisCacheTemplate(RedisConnectionFactory connectionFactory) {
+//        RedisTemplate<String, List<Map<String, ?>>> template = new RedisTemplate<>();
+//        template.setConnectionFactory(connectionFactory);
+//        template.setKeySerializer(new GenericJackson2JsonRedisSerializer());
+//        template.setHashKeySerializer(new GenericJackson2JsonRedisSerializer());
+//        template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+//        return template;
+//    }
 
 //    @Bean
 //    @Profile("dev")

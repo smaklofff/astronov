@@ -1,8 +1,7 @@
 package com.askme.astronov.service;
 
-import com.askme.astronov.aspects.annotations.CacheAnnotations;
-import com.askme.astronov.aspects.annotations.CacheAnnotations.Cacheable;
 import com.askme.astronov.aspects.annotations.CacheAnnotations.CacheEvict;
+import com.askme.astronov.aspects.annotations.CacheAnnotations.Cacheable;
 import com.askme.astronov.aspects.annotations.CacheAnnotations.CachePut;
 import com.askme.astronov.dto.SurveyRequestDto;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +14,17 @@ import java.util.regex.Pattern;
 @Slf4j
 public abstract class GptModel {
 
-    public abstract <T> List<Map<String, T>> getSurvey(SurveyRequestDto surveyRequestDto);
+    public abstract <T> List<Map<String, T>> generateSurvey(SurveyRequestDto surveyRequestDto);
+
+    @Cacheable(value = "survey", key = "#surveyRequestDto.toString()")
+    public <T> List<Map<String, T>> getSurvey(SurveyRequestDto surveyRequestDto) {
+        return generateSurvey(surveyRequestDto);
+    }
 
     // Метод для обновления кэша
     @CachePut(value = "survey", key = "#surveyRequestDto.toString()")
     public <T> List<Map<String, T>> updateCache(SurveyRequestDto surveyRequestDto) {
-        return getSurvey(surveyRequestDto);
+        return generateSurvey(surveyRequestDto);
     }
 
     // Метод для удаления конкретного значения из кэша

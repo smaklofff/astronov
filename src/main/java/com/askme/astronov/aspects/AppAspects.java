@@ -1,5 +1,7 @@
 package com.askme.astronov.aspects;
 
+import com.askme.astronov.aspects.annotations.JamAnnotations.OutgoingRequest;
+import com.askme.astronov.aspects.annotations.JamAnnotations.IncomingRequest;
 import com.askme.astronov.dto.SurveyRequestDto;
 import com.askme.astronov.dto.requests.RequestDto;
 import com.askme.astronov.service.MonitoringService;
@@ -22,8 +24,8 @@ public class AppAspects {
 
     private final MonitoringService monitoring;
 
-    @Around(value = "@annotation(com.askme.astronov.aspects.annotations.OutgoingRequest)")
-    public Object outgoingRequest(ProceedingJoinPoint joinPoint) {
+    @Around(value = "@annotation(outgoingRequest)")
+    public Object outgoingRequest(ProceedingJoinPoint joinPoint, OutgoingRequest outgoingRequest) {
         log.info("Adding log info in monitoring system (OutgoingRequest)");
         Object[] args = joinPoint.getArgs();
 
@@ -50,8 +52,8 @@ public class AppAspects {
         return result;
     }
 
-    @Around(value = "@annotation(com.askme.astronov.aspects.annotations.IncomingRequest)")
-    public Object incomingRequest(ProceedingJoinPoint joinPoint) {
+    @Around(value = "@annotation(incomingRequest)")
+    public Object incomingRequest(ProceedingJoinPoint joinPoint, IncomingRequest incomingRequest) {
         log.info("Adding log info in monitoring system (IncomingRequest)");
         Object[] args = joinPoint.getArgs();
 

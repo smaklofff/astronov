@@ -33,7 +33,7 @@ public class MistralChatServiceImpl extends GptModel {
 
 
     @Override
-    public <T> List<Map<String, T>> getSurvey(SurveyRequestDto surveyRequestDto) {
+    public <T> List<Map<String, T>> generateSurvey(SurveyRequestDto surveyRequestDto) {
         return processGptModelResponse(getMistralChatResponseDto(surveyRequestDto)).stream()
                 .map(x -> ConverterUtil.convertToObject(x, new TypeReference<Map<String, T>>() {})).toList();
     }

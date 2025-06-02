@@ -31,8 +31,7 @@ public class GigaChatServiceImpl extends GptModel {
     private final SecretsConfig secretsConfig;
 
     @Override
-    @Cacheable(value = "survey", key = "#surveyRequestDto.toString()")
-    public <T> List<Map<String, T>> getSurvey(SurveyRequestDto surveyRequestDto) {
+    public <T> List<Map<String, T>> generateSurvey(SurveyRequestDto surveyRequestDto) {
         log.info("My token: {}", gigaAccessTokenService.getAccessToken());
         return processGptModelResponse(getGigaChatResponseDto(surveyRequestDto)).stream()
                 .map(x -> ConverterUtil.convertToObject(x, new TypeReference<Map<String, T>>() {})).toList();
