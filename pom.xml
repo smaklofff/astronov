@@ -164,6 +164,7 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
+
 	</build>
 	<repositories>
 		<repository>
@@ -184,6 +185,7 @@
 			</activation>
 			<properties>
 				<spring.profiles.active>local</spring.profiles.active>
+				<env>local</env>
 			</properties>
 		</profile>
 
@@ -194,6 +196,7 @@
 			</activation>
 			<properties>
 				<spring.profiles.active>dev</spring.profiles.active>
+				<env>dev</env>
 			</properties>
 		</profile>
 	</profiles>

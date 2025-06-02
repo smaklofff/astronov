@@ -15,14 +15,13 @@ import java.util.Map;
 
 
 @Slf4j
-@RequiredArgsConstructor
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class AppAspects {
 
     private final MonitoringService monitoring;
 
-//    @Order(1)
     @Around(value = "@annotation(com.askme.astronov.aspects.annotations.OutgoingRequest)")
     public Object outgoingRequest(ProceedingJoinPoint joinPoint) {
         log.info("Adding log info in monitoring system (OutgoingRequest)");

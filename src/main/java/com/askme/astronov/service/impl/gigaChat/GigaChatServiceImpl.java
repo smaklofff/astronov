@@ -1,5 +1,6 @@
 package com.askme.astronov.service.impl.gigaChat;
 
+import com.askme.astronov.aspects.annotations.CacheAnnotations.Cacheable;
 import com.askme.astronov.config.SecretsConfig;
 import com.askme.astronov.dto.SurveyRequestDto;
 import com.askme.astronov.dto.requests.GigaChatRequestDto;
@@ -30,6 +31,7 @@ public class GigaChatServiceImpl extends GptModel {
     private final SecretsConfig secretsConfig;
 
     @Override
+    @Cacheable(value = "survey", key = "#surveyRequestDto.toString()")
     public <T> List<Map<String, T>> getSurvey(SurveyRequestDto surveyRequestDto) {
         log.info("My token: {}", gigaAccessTokenService.getAccessToken());
         return processGptModelResponse(getGigaChatResponseDto(surveyRequestDto)).stream()
